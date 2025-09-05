@@ -55,7 +55,7 @@ John Doe john@example.com`
 John,Doe,john.doe@example.com,Developer,US,Tech Corp`
 
     const result = parseCsv(csv)
-    
+
     expect(result).toHaveLength(1)
     expect(result[0]).toEqual({
       firstName: 'John',
@@ -66,7 +66,7 @@ John,Doe,john.doe@example.com,Developer,US,Tech Corp`
       companyName: 'Tech Corp',
       isValid: true,
       errors: [],
-      rowIndex: 2
+      rowIndex: 2,
     })
   })
 
@@ -77,15 +77,15 @@ John,,john@example.com
 John,Smith,`
 
     const result = parseCsv(csv)
-    
+
     expect(result).toHaveLength(3)
-    
+
     expect(result[0].isValid).toBe(false)
     expect(result[0].errors).toContain('First name is required')
-    
+
     expect(result[1].isValid).toBe(false)
     expect(result[1].errors).toContain('Last name is required')
-    
+
     expect(result[2].isValid).toBe(false)
     expect(result[2].errors).toContain('Email is required')
   })
@@ -96,7 +96,7 @@ John,Doe,invalid-email
 Jane,Smith,jane@example.com`
 
     const result = parseCsv(csv)
-    
+
     expect(result).toHaveLength(2)
     expect(result[0].isValid).toBe(false)
     expect(result[0].errors).toContain('Invalid email format')
@@ -108,7 +108,7 @@ Jane,Smith,jane@example.com`
 "John","Doe","john.doe@example.com","Software Engineer"`
 
     const result = parseCsv(csv)
-    
+
     expect(result).toHaveLength(1)
     expect(result[0].firstName).toBe('John')
     expect(result[0].lastName).toBe('Doe')
@@ -123,7 +123,7 @@ John,Doe,john@example.com
 Jane,Smith,jane@example.com`
 
     const result = parseCsv(csv)
-    
+
     expect(result).toHaveLength(2)
     expect(result[0].firstName).toBe('John')
     expect(result[1].firstName).toBe('Jane')
@@ -134,7 +134,7 @@ Jane,Smith,jane@example.com`
 John,Doe,john@example.com,Developer,US,Tech Corp`
 
     const result = parseCsv(csv)
-    
+
     expect(result).toHaveLength(1)
     expect(result[0].firstName).toBe('John')
     expect(result[0].lastName).toBe('Doe')
@@ -142,13 +142,12 @@ John,Doe,john@example.com,Developer,US,Tech Corp`
     expect(result[0].jobTitle).toBe('Developer')
   })
 
-
   it('should handle missing optional fields', () => {
     const csv = `firstName,lastName,email,jobTitle,countryCode
 John,Doe,john@example.com,,`
 
     const result = parseCsv(csv)
-    
+
     expect(result).toHaveLength(1)
     expect(result[0].jobTitle).toBeUndefined()
     expect(result[0].countryCode).toBeUndefined()
@@ -162,7 +161,7 @@ Jane,Smith,jane@example.com
 Bob,Johnson,bob@example.com`
 
     const result = parseCsv(csv)
-    
+
     expect(result).toHaveLength(3)
     expect(result[0].rowIndex).toBe(2)
     expect(result[1].rowIndex).toBe(3)
@@ -174,7 +173,7 @@ Bob,Johnson,bob@example.com`
  , ,invalid-email`
 
     const result = parseCsv(csv)
-    
+
     expect(result).toHaveLength(1)
     expect(result[0].isValid).toBe(false)
     expect(result[0].errors).toHaveLength(3)
@@ -188,7 +187,7 @@ Bob,Johnson,bob@example.com`
 John,Doe,john@example.com,someValue`
 
     const result = parseCsv(csv)
-    
+
     expect(result).toHaveLength(1)
     expect(result[0].firstName).toBe('John')
     expect(result[0].lastName).toBe('Doe')
@@ -203,7 +202,7 @@ John,Doe,john@example.com
 Jane,Johnson,jane@example.com`
 
     const result = parseCsv(csv)
-    
+
     expect(result).toHaveLength(3)
     expect(result[0].isValid).toBe(true)
     expect(result[1].isValid).toBe(false)
@@ -217,7 +216,7 @@ Jane,Johnson,jane@example.com`
  John , Doe , john@example.com `
 
     const result = parseCsv(csv)
-    
+
     expect(result).toHaveLength(1)
     expect(result[0].firstName).toBe('John')
     expect(result[0].lastName).toBe('Doe')
