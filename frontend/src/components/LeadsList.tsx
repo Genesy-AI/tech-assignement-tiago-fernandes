@@ -298,6 +298,9 @@ export const LeadsList: FC = () => {
                 >
                   Country
                 </th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50">
+                  Gender
+                </th>
                 <th
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50"
@@ -346,6 +349,23 @@ export const LeadsList: FC = () => {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900">{lead.countryCode || '-'}</div>
                     </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900">
+                      {lead.gender ? (
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                          lead.gender === 'male' 
+                            ? 'bg-blue-100 text-blue-800' 
+                            : lead.gender === 'female' 
+                            ? 'bg-pink-100 text-pink-800' 
+                            : 'bg-gray-100 text-gray-800'
+                        }`}>
+                          {lead.gender}
+                        </span>
+                      ) : (
+                        <span className="text-gray-500">-</span>
+                      )}
+                    </div>
+                  </td>
                     <td className="px-6 py-4">
                       <div className="text-sm text-gray-900 max-w-xs truncate" title={lead.message || ''}>
                         {lead.message || '-'}
