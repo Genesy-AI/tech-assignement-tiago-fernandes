@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   DefaultError,
   QueryClient,
@@ -35,24 +34,6 @@ const makeOptions = <TData = unknown, TError = DefaultError, TVariables = void, 
   options: UseMutationOptions<TData, TError, TVariables, TContext>
 ) => options
 
-/**
- * Wrapper around {@link useMutation} to call our {@link api} endpoints and invalidates the relevant queries on success and, for some endpoints, use optimistic updates.
- *
- * **Options are defined in: {@link apiMutationsOptions}.**
- *
- * _The point of this function is to centralize the options for all mutations in the app, so that we don't forget to invalidate the relevant queries on success and avoid duplicated code._
- *
- * @example
- * ```tsx
- * const createLead = useApiMutation('leads.create')
- * const handleCreate = async (lead) => {
- *    await createLead.mutateAsync(lead)
- * }
- * ```
- *
- * @param endpointPath - Dot-separated path to the endpoint in {@link api} to call.
- * @returns Same as {@link useMutation}.
- */
 export const useApiMutation = <P extends ApiMutationsPaths>(endpointPath: P) => {
   type Options = Path<ApiMutationsOptions, Split<P, '.'>>
   const useMutationTyped = useMutation<
@@ -82,6 +63,12 @@ const apiMutationsOptions = (queryClient: QueryClient) =>
 
           const newLead: ApiOutput<typeof api.leads.getMany>[number] = {
             id: -1,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            jobTitle: null,
+            countryCode: null,
+            companyName: null,
+            message: null,
             ...input,
           }
           const newLeads: ApiOutput<typeof api.leads.getMany> = [...(previousValue ?? []), newLead]

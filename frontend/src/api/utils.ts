@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AxiosResponse } from 'axios'
 import { axiosInstance } from '../utils/axios'
 
@@ -28,10 +27,14 @@ export function endpoint<Output, Input>(
     const url = `${typeof urlBuilder === 'string' ? urlBuilder : urlBuilder(body!)}`
 
     let res: AxiosResponse
-    if (method === 'get' || method === 'delete') {
+    if (method === 'get') {
       res = await axiosInstance[method](url, { params: body })
     } else {
-      res = await axiosInstance[method](url, body)
+      res = await axiosInstance.request({
+        method,
+        url,
+        data: body
+      })
     }
 
     return res.data as Output

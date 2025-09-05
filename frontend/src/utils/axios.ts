@@ -6,4 +6,7 @@ if (!import.meta.env.VITE_API_URL || typeof import.meta.env.VITE_API_URL !== 'st
 
 export const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
 })
