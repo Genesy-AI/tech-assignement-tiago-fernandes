@@ -18,10 +18,6 @@ app.use(function (req, res, next) {
   next()
 })
 
-app.post('/', async (req: Request, res: Response) => {
-  res.json({ message: 'Hello World!' })
-})
-
 app.post('/leads', async (req: Request, res: Response) => {
   const { name, lastName, email } = req.body
   

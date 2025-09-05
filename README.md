@@ -1,92 +1,116 @@
-# Genesy AI Fullstack Developer | Take-Home Assignment C
+<p align="center">
+  <img src="https://cdn.prod.website-files.com/674ec82ac8f13332ff5201aa/677eaa5351b3ef0c2418820a_favicon%20256x256.png" width="128" height="128" alt="Favicon">
+</p>
 
 ## Overview
 
-This take-home assignment is designed to assess your skills as a Fullstack Developer with a focus on frontend development at Genesy AI.
+Welcome to the **TinyGenesy** take‑home! This exercise is a condensed version of our product and day‑to‑day work. Please treat the codebase as if it were the one you ship to production.
 
-This assignment uses the same stack as our product, and the tasks are similar to what you would be working on if you join our team.
 
-## Task Description
+## What you’ll do (at a glance)
 
-Using the provided wireframes, create a functional UI and implement the following features.
+1. Review an open PR that implements a new feature.
 
-**Feel free to modify the project structure, design patterns, database schema, UI design, installed packages, UI component library as needed, and any other aspects to improve the project.**\
-Use any tools you prefer for development, including ChatGPT.
+2. Implement a new feature (details below).
 
-The only technologies you have to stick with are: React.js, TypeScript, TanStack Query, Node.js, Express, and Prisma.
+3. Investigate & fix a reported CSV import bug (details below).
 
-Commit your changes regularly to show your progress.
+4. Analyze the codebase and propose improvements.
 
-### Features
 
-![UI Wireframes](/docs/ui-wireframes.png)
+## Getting Started
 
-1. **UI/UX**:
-   - Develop the UI layout based on the provided wireframes. Feel free to make changes to the design, it's just a starting point.
-   - Ensure the UI clearly communicates loading states, errors, and what each button does for a user-friendly experience.
+### Prerequisites
 
-2. **Leads Table**:
-   - Display leads in a table format.
-   - Rows can be selected, to perform actions on selected leads.
+- **Node.js** (use the version in .nvmrc).
 
-3. **Delete Selected Leads**:
-   - Implement functionality to delete selected leads.
+- **pnpm** package manager.
 
-4. **Custom Message Generation**:
-   - Generate a personalized message for each lead by replacing `{field}` in the template with the lead's corresponding field value.
-   - If a field used in the template is missing on a lead:
-      - Display an error message.
-      - Do not generate the message for that lead.
-   - For now, we just need to store 1 message per lead, so it can be a column in the leads table.
+- **SQLite** (bundled; no separate install required).
 
-5. **Gender Guessing**:
-   - Use an external API (e.g., Genderize API) to guess the gender of selected leads.
-   - Ensure the API call is made on the backend.
-   - Save the guessed gender in the database.
+Install tools:
 
-6. **CSV Import**:
-   - Import leads from a CSV file.
-   - Two leads are considered the same if they have the same `firstName` and `lastName`.
-   - Exclude leads missing required fields (e.g., first name).
-   - You can find some example CSV files in the [`/docs`](/docs) folder.
-   - [OPTIONAL] Import report: Save import information (timestamp, file name, attempted imports, successful imports, text describing the errors) in the database and link this information to the respective leads. It doesn't need to be displayed in the UI, nor very detailed.
+- Node via nvm: https://github.com/nvm-sh/nvm#installing-and-updating
 
-#### Aspects we value
+- pnpm: https://pnpm.io/installation#using-other-package-managers
 
-- No code, lint, or console errors
-- User experience and interface quality
-- Production-ready code
-- Effective use of TypeScript and libraries
+### Environment setup
 
-## Development Instructions
-
-### Backend
-
-To set up and run the backend:
+**Backend (one‑time)**
 
 ```zsh
 cd backend
-npm install
-npm run dev
+nvm use                # Ensure the Node version from .nvmrc
+pnpm install           # Install dependencies
+pnpm migrate:dev       # Sync local SQLite with Prisma schema
+pnpm gen:prisma        # Generate Prisma client
 ```
 
-Every time you change the Prisma schema, run:
+**Backend (develop)**
 
 ```zsh
-npx prisma migrate dev
+cd backend
+pnpm run dev           # Starts the API server
 ```
 
-### Frontend
+When you change the Prisma schema:
+```zsh
+pnpm migrate:dev
+```
 
-To set up and run the frontend:
+**Frontend (one‑time)**
 
 ```zsh
 cd frontend
-npm install
-npm run dev
+nvm use                # Ensure the Node version from .nvmrc
+pnpm install
 ```
 
-#### Frontend notes
+**Frontend (develop)**
 
-- We included the hook `useApiMutation` that lets us centralize optimistic updates. We use it in our code, but since it may be a bit complex to understand without us explaining it, feel free to use the `useMutation` hook directly, or any other way you prefer.
-- We included the function `endpoint` that lets us build an `api` object with all the endpoints. To reference the types used, use `ApiOutput` and `ApiOutput`, like so: `ApiOutput<typeof api.leads.getMany>`.
+```zsh
+cd frontend
+pnpm run dev           # Starts the dev server
+```
+
+## Task Description
+
+### PR review
+
+Review the open PR as if it were from a teammate. Add any inline comments you find necessary and provide a final summary with either an approval or a change-request decision.
+
+### New feature
+
+Some users have mentioned they would like to track more data points for their leads.
+We are adding the following fields: lead’s phone number, years at their current company, and LinkedIn profile.
+
+We want user to be able to:
+
+ 1. See the new field in the table of leads
+ 2. Manually set those fields using the import from csv feature
+ 3. Use the new fields in the message composition
+
+Since the list of fields will continue to grow, we need to improve the UX of the message composition (no design provided).
+
+
+### Bug reported
+
+When importing from CSV, the country column displays strange characters that do not match valid country codes. I have been using the example CSV file.
+
+### Codebase Analysis & Roadmap
+
+Create an `IMPROVEMENTS.md` file as if it was a document in our project management tool.
+
+#### Note on AI use
+
+You’re welcome to use AI-assisted tools if you’d like. We are an AI-native company and incorporate them into our day-to-day work.
+
+You won’t be evaluated on producing a single predefined _correct solution_, but rather on your problem-solving skills, the product mindset you showcase, your ability to reason and explain your thought process, and the trade-offs behind your decisions.
+
+
+## Submission
+
+Work in the repository as you see fit. When you’re done, just ping us.
+
+We value the time you invest in this task, and we commit to spending a similar amount reviewing it thoroughly. Regardless of the outcome, we’ll provide constructive feedback so you can benefit from the evaluation.
+
