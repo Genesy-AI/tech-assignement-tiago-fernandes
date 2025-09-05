@@ -32,7 +32,31 @@ export const LeadsList: FC = () => {
     },
     onError: () => {
       toast.error('Failed to delete leads. Please try again.')
+    }
+  })
+
+  const guessGendersMutation = useMutation({
+    mutationFn: async (leadIds: number[]) => api.leads.guessGenders({ leadIds }),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['leads', 'getMany'] })
+      setSelectedLeads([])
+      setIsEnrichDropdownOpen(false)
+      
+      if (data.errors.length > 0) {
+        const successMessage = data.updatedCount > 0 
+          ? `Successfully updated ${data.updatedCount} genders. ${data.errors.length} failed.`
+          : `Failed to guess genders for ${data.errors.length} leads.`
+        toast.success(successMessage)
+      } else {
+        const message = data.updatedCount === 1 
+          ? `Successfully guessed gender for ${data.updatedCount} lead`
+          : `Successfully guessed genders for ${data.updatedCount} leads`
+        toast.success(message)
+      }
     },
+    onError: () => {
+      toast.error('Failed to guess genders. Please try again.')
+    }
   })
 
   const handleSelectAll = (checked: boolean) => {
@@ -171,27 +195,34 @@ export const LeadsList: FC = () => {
                     </button>
                     <button
                       onClick={() => {
-                        toast.error('Gender guessing feature is not yet implemented')
-                        setIsEnrichDropdownOpen(false)
+                        guessGendersMutation.mutate(selectedLeads)
                       }}
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                      disabled={guessGendersMutation.isPending}
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors disabled:opacity-50"
                     >
                       <div className="flex items-center">
-                        <svg
+                        {guessGendersMutation.isPending ? (
+                          <svg className="animate-spin mr-3 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                        ) : (
+                          <svg
                           className="mr-3 h-4 w-4"
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
                         >
-                          <path
+                            <path
                             strokeLinecap="round"
                             strokeLinejoin="round"
                             strokeWidth={2}
                             d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                           />
-                        </svg>
-                        Guess Gender
+                          </svg>
+                        )}
+                        {guessGendersMutation.isPending ? 'Guessing...' : 'Guess Gender'}
                       </div>
                     </button>
                   </div>
