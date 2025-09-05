@@ -11,9 +11,9 @@ Welcome to the **TinyGenesy** take‑home! This exercise is a condensed version 
 
 1. Review an open PR that implements a new feature.
 
-2. Implement a new feature (details below).
+2. Investigate & fix a reported CSV import bug (details below).
 
-3. Investigate & fix a reported CSV import bug (details below).
+3. Implement a new feature (details below).
 
 4. Analyze the codebase and propose improvements.
 
@@ -79,12 +79,17 @@ pnpm run dev           # Starts the dev server
 
 Review the open PR as if it were from a teammate. Add any inline comments you find necessary and provide a final summary with either an approval or a change-request decision.
 
+### Bug reported
+
+When importing from CSV, the country column displays strange characters that do not match valid country codes. I have been using the example CSV file.
+
+
 ### New feature
 
 Some users have mentioned they would like to track more data points for their leads.
 We are adding the following fields: lead’s phone number, years at their current company, and LinkedIn profile.
 
-We want user to be able to:
+We want users to be able to:
 
  1. See the new field in the table of leads
  2. Manually set those fields using the import from csv feature
@@ -92,14 +97,15 @@ We want user to be able to:
 
 Since the list of fields will continue to grow, we need to improve the UX of the message composition (no design provided).
 
-
-### Bug reported
-
-When importing from CSV, the country column displays strange characters that do not match valid country codes. I have been using the example CSV file.
-
 ### Codebase Analysis & Roadmap
 
-Create an `IMPROVEMENTS.md` file as if it was a document in our project management tool.
+Create an `IMPROVEMENTS.md` file as if it were a document in our project management tool. The goal is to capture:
+- Top priorities identified, with an Impact vs. Effort assessment
+- Quick wins (small, high-value changes)
+- Larger refactors that require more investment
+- Potential bugs and risky areas
+- Opportunities for better UX patterns
+- Developer experience (DX) improvements such as tooling, tests, and type safety
 
 #### Note on AI use
 
