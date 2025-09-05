@@ -17,7 +17,6 @@ export const CsvImportModal: FC<CsvImportModalProps> = ({ isOpen, onClose }) => 
   const fileInputRef = useRef<HTMLInputElement>(null)
   const queryClient = useQueryClient()
 
-
   const stats = useMemo(() => {
     const validLeads = csvData.filter((lead) => lead.isValid)
     const invalidLeads = csvData.filter((lead) => !lead.isValid)
@@ -237,9 +236,10 @@ export const CsvImportModal: FC<CsvImportModalProps> = ({ isOpen, onClose }) => 
                       browse
                     </button>
                   </p>
-                                     <p className="text-sm text-gray-500">
-                     CSV must include: firstName, lastName, email (required). Optional: jobTitle, countryCode, companyName
-                   </p>
+                  <p className="text-sm text-gray-500">
+                    CSV must include: firstName, lastName, email (required). Optional: jobTitle, countryCode,
+                    companyName
+                  </p>
                 </div>
               )}
             </div>

@@ -8,7 +8,7 @@ describe('generateMessageFromTemplate', () => {
     email: 'john.doe@example.com',
     jobTitle: 'Software Engineer',
     companyName: 'Tech Corp',
-    countryCode: 'US'
+    countryCode: 'US',
   }
 
   const partialLead: Lead = {
@@ -17,11 +17,11 @@ describe('generateMessageFromTemplate', () => {
     email: 'jane@example.com',
     jobTitle: undefined,
     companyName: '',
-    countryCode: 'CA'
+    countryCode: 'CA',
   }
 
   const minimalLead: Lead = {
-    firstName: 'Bob'
+    firstName: 'Bob',
   }
 
   describe('successful message generation', () => {
@@ -44,9 +44,12 @@ describe('generateMessageFromTemplate', () => {
     })
 
     it('should handle template with all available fields', () => {
-      const template = 'Name: {firstName} {lastName}, Email: {email}, Job: {jobTitle} at {companyName}, Country: {countryCode}'
+      const template =
+        'Name: {firstName} {lastName}, Email: {email}, Job: {jobTitle} at {companyName}, Country: {countryCode}'
       const result = generateMessageFromTemplate(template, fullLead)
-      expect(result).toBe('Name: John Doe, Email: john.doe@example.com, Job: Software Engineer at Tech Corp, Country: US')
+      expect(result).toBe(
+        'Name: John Doe, Email: john.doe@example.com, Job: Software Engineer at Tech Corp, Country: US'
+      )
     })
 
     it('should handle template with no field placeholders', () => {
@@ -62,43 +65,51 @@ describe('generateMessageFromTemplate', () => {
     })
 
     it('should handle complex message template', () => {
-      const template = 'Dear {firstName},\n\nI hope this message finds you well. I noticed you work at {companyName} as a {jobTitle}. I would love to connect with you.\n\nBest regards!'
+      const template =
+        'Dear {firstName},\n\nI hope this message finds you well. I noticed you work at {companyName} as a {jobTitle}. I would love to connect with you.\n\nBest regards!'
       const result = generateMessageFromTemplate(template, fullLead)
-      expect(result).toBe('Dear John,\n\nI hope this message finds you well. I noticed you work at Tech Corp as a Software Engineer. I would love to connect with you.\n\nBest regards!')
+      expect(result).toBe(
+        'Dear John,\n\nI hope this message finds you well. I noticed you work at Tech Corp as a Software Engineer. I would love to connect with you.\n\nBest regards!'
+      )
     })
   })
 
   describe('error handling for missing fields', () => {
     it('should throw error when field is null', () => {
       const template = 'Hello {firstName} {lastName}!'
-      expect(() => generateMessageFromTemplate(template, partialLead))
-        .toThrow('Missing required field: lastName')
+      expect(() => generateMessageFromTemplate(template, partialLead)).toThrow(
+        'Missing required field: lastName'
+      )
     })
 
     it('should throw error when field is undefined', () => {
       const template = 'Your job title is {jobTitle}'
-      expect(() => generateMessageFromTemplate(template, partialLead))
-        .toThrow('Missing required field: jobTitle')
+      expect(() => generateMessageFromTemplate(template, partialLead)).toThrow(
+        'Missing required field: jobTitle'
+      )
     })
 
     it('should throw error when field is empty string', () => {
       const template = 'You work at {companyName}'
-      expect(() => generateMessageFromTemplate(template, partialLead))
-        .toThrow('Missing required field: companyName')
+      expect(() => generateMessageFromTemplate(template, partialLead)).toThrow(
+        'Missing required field: companyName'
+      )
     })
 
     it('should throw error when field does not exist on lead', () => {
       const template = 'Hello {firstName}, your last name is {lastName}'
-      expect(() => generateMessageFromTemplate(template, minimalLead))
-        .toThrow('Missing required field: lastName')
+      expect(() => generateMessageFromTemplate(template, minimalLead)).toThrow(
+        'Missing required field: lastName'
+      )
     })
   })
 
   describe('handling of unknown and invalid fields', () => {
     it('should throw error for unknown field in template', () => {
       const template = 'Hello {firstName} {unknownField}!'
-      expect(() => generateMessageFromTemplate(template, fullLead))
-        .toThrow('Unknown field in template: unknownField')
+      expect(() => generateMessageFromTemplate(template, fullLead)).toThrow(
+        'Unknown field in template: unknownField'
+      )
     })
 
     it('should ignore invalid field patterns with hyphens', () => {
@@ -141,14 +152,16 @@ describe('generateMessageFromTemplate', () => {
 
     it('should handle brackets with numbers', () => {
       const template = 'Hello {firstName123}!'
-      expect(() => generateMessageFromTemplate(template, fullLead))
-        .toThrow('Unknown field in template: firstName123')
+      expect(() => generateMessageFromTemplate(template, fullLead)).toThrow(
+        'Unknown field in template: firstName123'
+      )
     })
 
     it('should handle case sensitivity', () => {
       const template = 'Hello {FirstName}!'
-      expect(() => generateMessageFromTemplate(template, fullLead))
-        .toThrow('Unknown field in template: FirstName')
+      expect(() => generateMessageFromTemplate(template, fullLead)).toThrow(
+        'Unknown field in template: FirstName'
+      )
     })
   })
 
@@ -163,7 +176,7 @@ describe('generateMessageFromTemplate', () => {
     it('should handle very long field values', () => {
       const longLead: Lead = {
         firstName: 'A'.repeat(1000),
-        companyName: 'B'.repeat(500)
+        companyName: 'B'.repeat(500),
       }
       const template = 'Name: {firstName}, Company: {companyName}'
       const result = generateMessageFromTemplate(template, longLead)
@@ -176,7 +189,7 @@ describe('generateMessageFromTemplate', () => {
       const specialLead: Lead = {
         firstName: 'José',
         companyName: 'Café & Co.',
-        email: 'josé@café.com'
+        email: 'josé@café.com',
       }
       const template = 'Hello {firstName} from {companyName}! Email: {email}'
       const result = generateMessageFromTemplate(template, specialLead)
@@ -186,7 +199,7 @@ describe('generateMessageFromTemplate', () => {
     it('should handle emojis in field values', () => {
       const emojiLead: Lead = {
         firstName: 'John 😊',
-        companyName: 'TechCorp 🚀'
+        companyName: 'TechCorp 🚀',
       }
       const template = 'Hi {firstName} from {companyName}!'
       const result = generateMessageFromTemplate(template, emojiLead)

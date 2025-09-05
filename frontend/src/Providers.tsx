@@ -15,10 +15,12 @@ export const Providers: FC<PropsWithChildren> = ({ children }) => {
         containerClassName="!top-5 !right-5"
         toastOptions={{
           duration: 4000,
-          className: 'bg-white/95 text-gray-700 border border-gray-200/30 rounded-xl shadow-xl backdrop-blur-md text-sm font-medium px-4 py-3 max-w-sm',
+          className:
+            'bg-white/95 text-gray-700 border border-gray-200/30 rounded-xl shadow-xl backdrop-blur-md text-sm font-medium px-4 py-3 max-w-sm',
           success: {
             duration: 3000,
-            className: 'bg-green-50/95 text-emerald-700 border border-emerald-200/20 rounded-xl shadow-xl backdrop-blur-md text-sm font-medium px-4 py-3 max-w-sm',
+            className:
+              'bg-green-50/95 text-emerald-700 border border-emerald-200/20 rounded-xl shadow-xl backdrop-blur-md text-sm font-medium px-4 py-3 max-w-sm',
             iconTheme: {
               primary: '#10b981',
               secondary: '#ffffff',
@@ -26,14 +28,16 @@ export const Providers: FC<PropsWithChildren> = ({ children }) => {
           },
           error: {
             duration: 5000,
-            className: 'bg-red-50/95 text-red-700 border border-red-200/20 rounded-xl shadow-xl backdrop-blur-md text-sm font-medium px-4 py-3 max-w-sm',
+            className:
+              'bg-red-50/95 text-red-700 border border-red-200/20 rounded-xl shadow-xl backdrop-blur-md text-sm font-medium px-4 py-3 max-w-sm',
             iconTheme: {
               primary: '#ef4444',
               secondary: '#ffffff',
             },
           },
           loading: {
-            className: 'bg-gray-50/95 text-gray-600 border border-gray-200/30 rounded-xl shadow-xl backdrop-blur-md text-sm font-medium px-4 py-3 max-w-sm',
+            className:
+              'bg-gray-50/95 text-gray-600 border border-gray-200/30 rounded-xl shadow-xl backdrop-blur-md text-sm font-medium px-4 py-3 max-w-sm',
             iconTheme: {
               primary: '#6b7280',
               secondary: '#ffffff',

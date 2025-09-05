@@ -32,7 +32,7 @@ export const parseCsv = (content: string): CsvLead[] => {
 
   if (parseResult.errors.length > 0) {
     const criticalErrors = parseResult.errors.filter(
-      error => error.type === 'Delimiter' || error.type === 'Quotes' || error.type === 'FieldMismatch'
+      (error) => error.type === 'Delimiter' || error.type === 'Quotes' || error.type === 'FieldMismatch'
     )
     if (criticalErrors.length > 0) {
       throw new Error(`CSV parsing failed: ${criticalErrors[0].message}`)
@@ -46,14 +46,14 @@ export const parseCsv = (content: string): CsvLead[] => {
   const data: CsvLead[] = []
 
   parseResult.data.forEach((row, index) => {
-    if (Object.values(row).every(value => !value)) return
+    if (Object.values(row).every((value) => !value)) return
 
     const lead: Partial<CsvLead> = { rowIndex: index + 2 }
 
     Object.entries(row).forEach(([header, value]) => {
       const normalizedHeader = header.toLowerCase().replace(/[^a-z]/g, '')
       const trimmedValue = value?.trim() || ''
-      
+
       switch (normalizedHeader) {
         case 'firstname':
           lead.firstName = trimmedValue

@@ -33,7 +33,7 @@ export function endpoint<Output, Input>(
       res = await axiosInstance.request({
         method,
         url,
-        data: body
+        data: body,
       })
     }
 
