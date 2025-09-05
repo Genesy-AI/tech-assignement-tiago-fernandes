@@ -300,7 +300,7 @@ app.post('/leads/bulk', async (req: Request, res: Response) => {
             countryCode: lead.countryCode ? lead.countryCode.trim() : null,
             companyName: lead.companyName ? lead.companyName.trim() : null,
             gender: lead.gender ? lead.gender.trim() : null,
-          },,
+          },
         })
         importedCount++
       } catch (error) {
