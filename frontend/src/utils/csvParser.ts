@@ -1,4 +1,5 @@
 import Papa from 'papaparse'
+import { isValidCountryCode } from './countryCode'
 
 export interface CsvLead {
   firstName: string
@@ -88,12 +89,17 @@ export const parseCsv = (content: string): CsvLead[] => {
     } else if (!isValidEmail(lead.email)) {
       errors.push('Invalid email format')
     }
+    // we validate the country code ONLY if it is present
+    if (lead.countryCode?.trim() && !isValidCountryCode(lead.countryCode?.trim())) {
+      errors.push('Country code is not valid')
+    }
 
     data.push({
       ...lead,
       firstName: lead.firstName || '',
       lastName: lead.lastName || '',
       email: lead.email || '',
+      countryCode: lead.countryCode?.toUpperCase() || undefined,
       isValid: errors.length === 0,
       errors,
     } as CsvLead)
