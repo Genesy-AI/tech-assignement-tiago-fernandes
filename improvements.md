@@ -4,6 +4,14 @@
 |------|--------|-------------|
 
 
+# Opportunities for better UX patterns
+
+| item | impact | description | effort |
+|------|--------|-------------|--------|
+| click out of the "Enrich" button | low | improved the user's usability as they don't need to click back in the button to exit the submenu. Would follow the same behaviour as when we have the import CSV modal. | low |
+| Message(s) in a different table than lead table| high | TODO: explain how can we list all the messages targeted for a group of leads + list the users that would be affected + how does create a message for a set of users would create it? + data structure in the backend affection | medium / high|
+| select button always visible | medium | TODO | low/medium | 
+
 # Developer experience (DX) improvements such as tooling, tests, and type safety
 
 | item | impact | description |

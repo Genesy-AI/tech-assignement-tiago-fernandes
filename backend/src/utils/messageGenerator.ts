@@ -1,31 +1,31 @@
-export interface Lead {
-  firstName: string
-  lastName?: string | null
-  email?: string | null
-  jobTitle?: string | null
-  companyName?: string | null
-  countryCode?: string | null
-}
-
+import { Lead } from '../lead'
+// TODO double check where Lead comes from? should it be LeadModel?
 export function generateMessageFromTemplate(template: string, lead: Lead): string {
   let message = template
 
-  const availableFields = {
+  // key fields that can be replaced in the template for a value.
+  const replaceableKeyFields = {
     firstName: lead.firstName,
     lastName: lead.lastName,
     email: lead.email,
     jobTitle: lead.jobTitle,
     companyName: lead.companyName,
     countryCode: lead.countryCode,
+    phoneNumber: lead.phoneNumber,
+    yearsAtCompany: lead.yearsAtCompany,
+    linkedinProfile: lead.linkedinProfile,
   }
 
-  const templateVariables = template.match(/\{(\w+)\}/g) || []
+  console.log('availableFields', replaceableKeyFields)
+  console.log('lead keys', Object.keys(lead))
 
+  const templateVariables = template.match(/\{(\w+)\}/g) || []
+  console.log('templateVariables', templateVariables)
   for (const variable of templateVariables) {
     const fieldName = variable.slice(1, -1)
 
-    if (fieldName in availableFields) {
-      const fieldValue = availableFields[fieldName as keyof typeof availableFields]
+    if (fieldName in replaceableKeyFields) {
+      const fieldValue = replaceableKeyFields[fieldName as keyof typeof replaceableKeyFields]
 
       if (fieldValue === null || fieldValue === undefined || fieldValue === '') {
         throw new Error(`Missing required field: ${fieldName}`)

@@ -8,6 +8,9 @@ export interface CsvLead {
   jobTitle?: string
   countryCode?: string
   companyName?: string
+  phoneNumber?: string
+  yearsAtCompany?: string
+  linkedinProfile?: string
   isValid: boolean
   errors: string[]
   rowIndex: number
@@ -47,11 +50,19 @@ export const parseCsv = (content: string): CsvLead[] => {
   const data: CsvLead[] = []
 
   parseResult.data.forEach((row, index) => {
-    if (Object.values(row).every((value) => !value)) return
+    console.log('row', row)
+    if (Object.values(row).every((value) => !value)) {
+      console.log('row is empty')
+      return
+    } else {
+      console.log('row is not empty')
+    }
 
     const lead: Partial<CsvLead> = { rowIndex: index + 2 }
-
+    console.log('lead', lead)
     Object.entries(row).forEach(([header, value]) => {
+      console.log('header', header)
+      console.log('value', value)
       const normalizedHeader = header.toLowerCase().replace(/[^a-z]/g, '')
       const trimmedValue = value?.trim() || ''
 
@@ -74,6 +85,15 @@ export const parseCsv = (content: string): CsvLead[] => {
         case 'companyname':
           lead.companyName = trimmedValue || undefined
           break
+        case 'phonenumber':
+          lead.phoneNumber = trimmedValue || undefined
+          break
+        case 'yearsatcompany':
+          lead.yearsAtCompany = trimmedValue || undefined
+          break
+        case 'linkedinprofile':
+          lead.linkedinProfile = trimmedValue || undefined
+          break
       }
     })
 
@@ -93,13 +113,14 @@ export const parseCsv = (content: string): CsvLead[] => {
     if (lead.countryCode?.trim() && !isValidCountryCode(lead.countryCode?.trim())) {
       errors.push('Country code is not valid')
     }
-
+    console.log('lead', lead)
     data.push({
       ...lead,
       firstName: lead.firstName || '',
       lastName: lead.lastName || '',
       email: lead.email || '',
       countryCode: lead.countryCode?.toUpperCase() || undefined,
+      phoneNumber: lead.phoneNumber || undefined,
       isValid: errors.length === 0,
       errors,
     } as CsvLead)
