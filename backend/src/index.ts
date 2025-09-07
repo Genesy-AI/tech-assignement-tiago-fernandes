@@ -110,6 +110,7 @@ app.post('/leads/generate-messages', async (req: Request, res: Response) => {
 
   const { leadIds, template } = req.body
 
+  // IMPROVEMENT: validation + throw custom error class. (validation middleware? not sure as it might be business logic)
   if (!Array.isArray(leadIds) || leadIds.length === 0) {
     return res.status(400).json({ error: 'leadIds must be a non-empty array' })
   }
@@ -176,6 +177,8 @@ app.post('/leads/bulk', async (req: Request, res: Response) => {
   }
 
   try {
+
+    // IMPROVEMENT: input validation extra step regardless of the frontend validation?
     const validLeads = leads.filter((lead) => {
       return (
         lead.firstName &&

@@ -1,5 +1,6 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { parseCsv, isValidEmail } from './csvParser'
+import * as CountryCode from './countryCode'
 
 describe('isValidEmail', () => {
   it('should return true for valid email addresses', () => {
@@ -150,6 +151,42 @@ John,Doe,john@example.com,,`
 
     expect(result).toHaveLength(1)
     expect(result[0].jobTitle).toBeUndefined()
+    expect(result[0].countryCode).toBeUndefined()
+    expect(result[0].isValid).toBe(true)
+  })
+
+  it('should validate optional country code field if present', () => {
+    const csv1 = `firstName,lastName,email,jobTitle,countryCode
+John,Doe,john@example.com,,es
+Jane,Smith,jane@example.com,,UK
+John,Doe,john@example.com,,12
+John,Doe,john@example.com,,XYZ`
+
+    const result = parseCsv(csv1)
+
+    expect(result).toHaveLength(4)
+    expect(result[0].jobTitle).toBeUndefined()
+    expect(result[0].countryCode).toEqual('ES')
+    expect(result[0].isValid).toBe(true)
+    expect(result[1].countryCode).toEqual('UK')
+    expect(result[1].isValid).toBe(false)
+    expect(result[1].errors[0]).toBe('Country code is not valid')
+    expect(result[2].countryCode).toEqual('12')
+    expect(result[2].isValid).toBe(false)
+    expect(result[2].errors[0]).toBe('Country code is not valid')
+    expect(result[3].countryCode).toEqual('XYZ')
+    expect(result[3].isValid).toBe(false)
+    expect(result[3].errors[0]).toBe('Country code is not valid')
+  })
+
+  it('should skip country code validation if it is empty', () => {
+    const csv = `firstName,lastName,email,jobTitle,countryCode
+John,Doe,john@example.com,,`
+    vi.spyOn(CountryCode, 'isValidCountryCode').mockReturnValue(true)
+
+    const result = parseCsv(csv)
+    expect(CountryCode.isValidCountryCode).toHaveBeenCalledTimes(0)
+    expect(result).toHaveLength(1)
     expect(result[0].countryCode).toBeUndefined()
     expect(result[0].isValid).toBe(true)
   })

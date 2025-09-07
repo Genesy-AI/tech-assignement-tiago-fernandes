@@ -19,6 +19,9 @@ importers:
       axios:
         specifier: ^1.11.0
         version: 1.11.0
+      country-codes-list:
+        specifier: ^2.0.0
+        version: 2.0.0
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -1401,6 +1404,12 @@ packages:
     resolution:
       {
         integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==,
+      }
+
+  country-codes-list@2.0.0:
+    resolution:
+      {
+        integrity: sha512-KZqq/LBdCD76hQCa6nOx0bA/nIjYly1OtV8+Bbt/4SW+mJEqGk7oZHjUj7PRrV0gXJJKs6Tv2cIntFdofBByvA==,
       }
 
   cross-spawn@7.0.6:
@@ -3595,6 +3604,8 @@ snapshots:
       delayed-stream: 1.0.0
 
   concat-map@0.0.1: {}
+
+  country-codes-list@2.0.0: {}
 
   cross-spawn@7.0.6:
     dependencies:

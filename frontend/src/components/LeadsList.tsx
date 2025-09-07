@@ -5,6 +5,8 @@ import { api } from '../api'
 import { MessageTemplateModal } from './MessageTemplateModal'
 import { CsvImportModal } from './CsvImportModal'
 
+import { countryCodesFlags } from '../utils/countryCode'
+
 export const LeadsList: FC = () => {
   const [selectedLeads, setSelectedLeads] = useState<number[]>([])
   const [isMessageModalOpen, setIsMessageModalOpen] = useState(false)
@@ -344,7 +346,10 @@ export const LeadsList: FC = () => {
                       <div className="text-sm text-gray-900">{lead.companyName || '-'}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">{lead.countryCode || '-'}</div>
+                      {/* <div className="text-sm text-gray-900">{lead.countryCode || '-'}</div> */}
+                      <div className="text-sm text-gray-900">
+                        {lead.countryCode ? countryCodesFlags[lead.countryCode] : '-'}
+                      </div>
                     </td>
                     <td className="px-6 py-4">
                       <div className="text-sm text-gray-900 max-w-xs truncate" title={lead.message || ''}>
