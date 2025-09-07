@@ -178,12 +178,12 @@ John,Doe,john@example.com,,XYZ`
     expect(result[3].isValid).toBe(false)
     expect(result[3].errors[0]).toBe('Country code is not valid')
   })
-  
-  it("should skip country code validation if it is empty", () => {
+
+  it('should skip country code validation if it is empty', () => {
     const csv = `firstName,lastName,email,jobTitle,countryCode
 John,Doe,john@example.com,,`
     vi.spyOn(CountryCode, 'isValidCountryCode').mockReturnValue(true)
-    
+
     const result = parseCsv(csv)
     expect(CountryCode.isValidCountryCode).toHaveBeenCalledTimes(0)
     expect(result).toHaveLength(1)

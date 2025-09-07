@@ -346,8 +346,10 @@ export const LeadsList: FC = () => {
                       <div className="text-sm text-gray-900">{lead.companyName || '-'}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                    {/* <div className="text-sm text-gray-900">{lead.countryCode || '-'}</div> */}
-                    <div className="text-sm text-gray-900">{lead.countryCode ? countryCodesFlags[lead.countryCode] : '-'}</div>
+                      {/* <div className="text-sm text-gray-900">{lead.countryCode || '-'}</div> */}
+                      <div className="text-sm text-gray-900">
+                        {lead.countryCode ? countryCodesFlags[lead.countryCode] : '-'}
+                      </div>
                     </td>
                     <td className="px-6 py-4">
                       <div className="text-sm text-gray-900 max-w-xs truncate" title={lead.message || ''}>
