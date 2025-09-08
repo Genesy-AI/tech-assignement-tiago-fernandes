@@ -4,10 +4,17 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 import { api } from '../api'
 import { CsvLead, parseCsv } from '../utils/csvParser'
+import { EditableCell } from './csvImport/EditableCell'
 
 interface CsvImportModalProps {
   isOpen: boolean
   onClose: () => void
+}
+
+const EDITABLE_FIELDS = {
+  yearsAtCompany: 'Years at Company',
+  linkedinProfile: 'Linkedin Profile',
+  phoneNumber: 'Phone Number',
 }
 
 export const CsvImportModal: FC<CsvImportModalProps> = ({ isOpen, onClose }) => {
@@ -42,6 +49,13 @@ export const CsvImportModal: FC<CsvImportModalProps> = ({ isOpen, onClose }) => 
     }
   }, [csvData])
 
+  const setCsvDataAtIndex = (index: number, data: string, key: string) => {
+    setCsvData((prev) => {
+      const next = [...prev]
+      next[index] = { ...next[index], [key]: data }
+      return next
+    })
+  }
   const handleFileSelect = (file: File) => {
     if (!file.name.endsWith('.csv')) {
       toast.error('Please select a CSV file')
@@ -290,6 +304,11 @@ export const CsvImportModal: FC<CsvImportModalProps> = ({ isOpen, onClose }) => 
                       <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">
                         Company
                       </th>
+                      {Object.entries(EDITABLE_FIELDS).map(([keyName, displayName]) => (
+                        <th key={keyName} className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                          {displayName}
+                        </th>
+                      ))}
                       <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">
                         Errors
                       </th>
@@ -316,6 +335,16 @@ export const CsvImportModal: FC<CsvImportModalProps> = ({ isOpen, onClose }) => 
                         <td className="px-3 py-2 text-sm text-gray-900">{lead.email || '-'}</td>
                         <td className="px-3 py-2 text-sm text-gray-900">{lead.countryCode || '-'}</td>
                         <td className="px-3 py-2 text-sm text-gray-900">{lead.companyName || '-'}</td>
+                        {Object.entries(EDITABLE_FIELDS).map(([keyName, displayName], internalKey) => (
+                          <EditableCell
+                            displayName={displayName}
+                            key={internalKey}
+                            keyName={keyName}
+                            value={lead[keyName as keyof CsvLead] as string}
+                            index={index}
+                            updateValue={(val) => setCsvDataAtIndex(index, val, keyName)}
+                          />
+                        ))}
                         <td className="px-3 py-2 text-sm text-red-600">{lead.errors.join(', ') || '-'}</td>
                       </tr>
                     ))}
@@ -359,3 +388,8 @@ export const CsvImportModal: FC<CsvImportModalProps> = ({ isOpen, onClose }) => 
 
   return createPortal(modalContent, document.body)
 }
+
+// TODO : delay the onchange
+// setTimeout(() => {
+//   console.log('timeout 500')
+// }, 500);

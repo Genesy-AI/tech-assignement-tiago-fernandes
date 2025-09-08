@@ -107,7 +107,17 @@ export const MessageTemplateModal: FC<MessageTemplateModalProps> = ({
   }, [isOpen, handleClose])
 
   // TODO fetch from backend
-  const availableFields = ['firstName', 'lastName', 'email', 'jobTitle', 'companyName', 'countryCode', 'phoneNumber', 'yearsAtCompany', 'linkedinProfile']
+  const availableFields = [
+    'firstName',
+    'lastName',
+    'email',
+    'jobTitle',
+    'companyName',
+    'countryCode',
+    'phoneNumber',
+    'yearsAtCompany',
+    'linkedinProfile',
+  ]
 
   const insertField = (field: string) => {
     if (textareaRef.current) {
