@@ -5,7 +5,7 @@ export type LeadModel = {
   firstName: string
   lastName: string
   email: string
-  jobTitle : string | null
+  jobTitle: string | null
   companyName: string | null
   countryCode: string | null
   phoneNumber: string | null

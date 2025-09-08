@@ -1,13 +1,12 @@
 import { PrismaClient } from '@prisma/client'
 import express, { NextFunction, Request, Response } from 'express'
 import { generateMessageFromTemplate } from './utils/messageGenerator'
-import { isValidLead, Lead, mapToLead } from './lead'
-import { LeadModel } from './lead/model'
-
-const prisma = new PrismaClient()
+import { createBulkLeadsController } from './controllers/createBulkLeadsController'
+import { jsonValidatorMiddleware } from './middlewares/jsonValidatorMiddleware'
+// TODO prisma / and Repository abstraction to a different layer
+export const prisma = new PrismaClient()
 const app = express()
 app.use(express.json())
-
 
 // IMPROVEMENT: segregate controller logic from routes logic.
 app.use(function (req, res, next) {
@@ -22,14 +21,6 @@ app.use(function (req, res, next) {
 
   next()
 })
-
-// IMPROVEMENT: move this to a middleware folder
-const jsonValidatorMiddleware = (req: Request, res: Response, next: NextFunction) => {
-  if (!req.body || typeof req.body !== 'object') {
-    return res.status(400).json({ error: 'Request body is required and must be valid JSON' })
-  }
-  next()
-}
 
 app.post('/leads', async (req: Request, res: Response) => {
   const { name, lastName, email } = req.body
@@ -171,114 +162,8 @@ app.post('/leads/generate-messages', jsonValidatorMiddleware, async (req: Reques
   }
 })
 
-app.post('/leads/bulk', jsonValidatorMiddleware, async (req: Request, res: Response) => {
-  const { leads } = req.body
-
-  if (!Array.isArray(leads) || leads.length === 0) {
-    return res.status(400).json({ error: 'leads must be a non-empty array' })
-  }
-
-  try {
-    // IMPROVEMENT: input validation extra step regardless of the frontend validation?
-    
-    const validLeads : Lead[] = leads.map((lead) => {
-      try {
-        return mapToLead(lead)
-      } catch (error) {
-        // TODO remove these logs
-        // how should we log the invalid leads? 
-        console.log('lead', lead)
-        console.error('Error mapping lead:', error)
-        return null
-      }
-    }).filter((lead) => !!lead)
-
-    if (validLeads.length === 0) {
-      return res
-        .status(400)
-        .json({ error: 'No valid leads found. firstName, lastName, and email are required.' })
-    }
-
-    // IMPRovement: LeadRepository abstraction
-    const existingLeads: LeadModel[] = await prisma.lead.findMany({
-      where: {
-        OR: validLeads.map((lead) => ({
-          AND: [{ firstName: lead.firstName.trim() }, { lastName: lead.lastName.trim() }],
-        })),
-      },
-    })
-    
-    console.log('existingLeads', existingLeads)
-
-    const leadKeys = new Set(
-      existingLeads.map((lead) => `${lead.firstName.toLowerCase()}_${(lead.lastName || '').toLowerCase()}`)
-    )
-
-    console.log('leadKeys', leadKeys)
-
-    const uniqueLeads = validLeads.filter((lead) => {
-      const key = `${lead.firstName.toLowerCase()}_${lead.lastName?.toLowerCase()}`
-      return !leadKeys.has(key)
-    })
-
-    console.log('uniqueLeads', uniqueLeads)
-
-    let importedCount = 0
-    const errors: Array<{ lead: Lead; error: string }> = []
-    // IMPROVEMENT: parallelise it make this loops async, do a promise.all to create all in parallel
-    for (const lead of uniqueLeads) {
-      try {
-        await prisma.lead.create({
-          data: {...lead},
-        })
-        importedCount++
-      } catch (error) {
-        errors.push({
-          lead: lead,
-          error: error instanceof Error ? error.message : 'Unknown error',
-        })
-      }
-    }
-
-    res.json({
-      success: true,
-      importedCount,
-      duplicatesSkipped: validLeads.length - uniqueLeads.length,
-      invalidLeads: leads.length - validLeads.length,
-      errors,
-    })
-  } catch (error) {
-    console.error('Error importing leads:', error)
-    res.status(500).json({ error: 'Failed to import leads' })
-  }
-})
+app.post('/leads/bulk', jsonValidatorMiddleware, createBulkLeadsController)
 
 app.listen(4000, () => {
   console.log('Express server is running on port 4000')
 })
-
-
-
-// for (const lead of uniqueLeads) {
-    //   try {
-    //     await prisma.lead.create({
-    //       data: {
-    //         firstName: lead.firstName.trim(),
-    //         lastName: lead.lastName!.trim(),
-    //         email: lead.email!.trim(),
-    //         jobTitle: lead.jobTitle ? lead.jobTitle.trim() : null,
-    //         countryCode: lead.countryCode ? lead.countryCode.trim() : null,
-    //         companyName: lead.companyName ? lead.companyName.trim() : null,
-    //         phoneNumber: lead.phoneNumber ? lead.phoneNumber.trim() : null,
-    //         yearsAtCompany: lead.yearsAtCompany ? lead.yearsAtCompany.trim() : null,
-    //         linkedinProfile: lead.linkedinProfile ? lead.linkedinProfile.trim() : null,
-    //       },
-    //     })
-    //     importedCount++
-    //   } catch (error) {
-    //     errors.push({
-    //       lead: lead,
-    //       error: error instanceof Error ? error.message : 'Unknown error',
-    //     })
-    //   }
-    // }
