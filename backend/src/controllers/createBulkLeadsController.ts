@@ -4,6 +4,12 @@ import { LeadModel } from '../lead/model'
 import { Lead, LeadResults, LeadError } from '../lead/types'
 import * as LeadRepository from '../lead/repository'
 
+/**
+ * Create bulk leads controller
+ * @param req
+ * @param res
+ * @returns
+ */
 export const createBulkLeadsController = async (req: Request, res: Response) => {
   try {
     const { leads } = req.body
