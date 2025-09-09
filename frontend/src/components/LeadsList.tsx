@@ -6,6 +6,7 @@ import { MessageTemplateModal } from './MessageTemplateModal'
 import { CsvImportModal } from './CsvImportModal'
 
 import { countryCodesFlags } from '../utils/countryCode'
+import { IconBrandLinkedinFilled } from '@tabler/icons-react'
 
 export const LeadsList: FC = () => {
   const [selectedLeads, setSelectedLeads] = useState<number[]>([])
@@ -381,9 +382,10 @@ export const LeadsList: FC = () => {
                             href={lead.linkedinProfile}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                            className="inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 hover:text-blue-600 transition-colors"
                           >
-                            profile
+                            <IconBrandLinkedinFilled size={20} />
+                            &nbsp;LinkedIn
                           </a>
                         </>
                       )}
