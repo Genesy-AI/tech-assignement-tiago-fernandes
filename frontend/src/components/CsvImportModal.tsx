@@ -391,8 +391,3 @@ export const CsvImportModal: FC<CsvImportModalProps> = ({ isOpen, onClose }) => 
 
   return createPortal(modalContent, document.body)
 }
-
-// TODO : delay the onchange
-// setTimeout(() => {
-//   console.log('timeout 500')
-// }, 500);
