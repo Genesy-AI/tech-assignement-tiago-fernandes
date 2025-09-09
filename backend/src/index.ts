@@ -5,12 +5,10 @@ import { createBulkLeadsController } from './controllers/createBulkLeadsControll
 import { jsonValidatorMiddleware } from './middlewares/jsonValidatorMiddleware'
 import { LeadModel } from './lead/model'
 
-// IMPROVEMENT: prisma / and Repository abstraction to a different layer
 export const prisma = new PrismaClient()
 const app = express()
 app.use(express.json())
 
-// IMPROVEMENT: segregate controller logic from routes logic.
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*')
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
@@ -108,7 +106,6 @@ app.delete('/leads', jsonValidatorMiddleware, async (req: Request, res: Response
 app.post('/leads/generate-messages', jsonValidatorMiddleware, async (req: Request, res: Response) => {
   const { leadIds, template } = req.body
 
-  // IMPROVEMENT: validation + throw custom error class. (validation middleware? not sure as it might be business logic)
   if (!Array.isArray(leadIds) || leadIds.length === 0) {
     return res.status(400).json({ error: 'leadIds must be a non-empty array' })
   }
@@ -136,7 +133,6 @@ app.post('/leads/generate-messages', jsonValidatorMiddleware, async (req: Reques
     for (const lead of leads) {
       try {
         const message = generateMessageFromTemplate(template, lead)
-        // IMPROVEMENT:parallelise it make this loops async, do a promise.all to update all in parallel
         await prisma.lead.update({
           where: { id: lead.id },
           data: { message },

@@ -2,8 +2,6 @@ import { prisma } from '../index'
 import { Lead, LeadCreationResults, LeadCreationResult } from './types'
 import { LeadModel } from './model'
 
-// IMPROVEMENT: explain this repository layer. why and what's the future for it.
-
 /**
  * Create leads in the database
  * (parallelises the create leads operation)

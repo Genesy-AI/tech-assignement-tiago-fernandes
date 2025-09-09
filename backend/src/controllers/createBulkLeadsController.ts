@@ -27,10 +27,8 @@ export const createBulkLeadsController = async (req: Request, res: Response) => 
         .json({ error: 'No valid leads found. firstName, lastName, and email are required.' })
     }
 
-    // IMPROVEMENT: LeadRepository and LeadService abstraction
     const newLeads: Lead[] = await findNewLeads(validLeads)
 
-    // IMPROVEMENT: parallelise it make this loops async, do a promise.all to create all in parallel
     const { importedCount, errors }: LeadCreationResults = await LeadRepository.createLeads(newLeads)
 
     res.json({
@@ -41,7 +39,6 @@ export const createBulkLeadsController = async (req: Request, res: Response) => 
       errors,
     })
   } catch (error) {
-    // IMPROVEMENT: Error Handling middleware, throw error(message)
     console.error('Error importing leads:', error)
     res
       .status(500)

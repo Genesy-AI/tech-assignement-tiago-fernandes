@@ -1,5 +1,3 @@
-// IMPROVEMENT: Interfaces and DTOs to a different layer
-// IMPROVEMENT: Lead as a Class with methods to validate
 import { Lead } from './types'
 
 /**
@@ -72,7 +70,6 @@ export function isValidLead(lead: any): boolean {
     return false
   }
   // optional fields
-  // IMPROVEMENT: make this more DRY
   // if the optional fields are present, they should be strings and not null or undefined
   if (!!lead.companyName && typeof lead.companyName !== 'string') {
     return false
