@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
+import { IconEdit } from '@tabler/icons-react'
 
 export const EditableCell = ({
   updateValue,
@@ -27,7 +28,7 @@ export const EditableCell = ({
 export const EditableField = ({
   value,
   onSave,
-  placeholder = '-',
+  placeholder = '',
 }: {
   value: string | undefined
   onSave?: (newValue: string) => void
@@ -60,8 +61,10 @@ export const EditableField = ({
     const display = (value ?? '').trim() || placeholder
     return (
       <div className="w-full text-left hover:underline cursor-pointer" onClick={() => setIsEditing(true)}>
-        <span className="ml-2">📝</span>
-        <span className="ml-2">{display}</span>
+        <span className="inline-block">
+          <IconEdit className="inline-block" size={14} />
+          &nbsp;{display}
+        </span>
       </div>
     )
   }

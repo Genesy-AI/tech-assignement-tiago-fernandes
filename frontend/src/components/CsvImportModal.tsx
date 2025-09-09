@@ -305,7 +305,10 @@ export const CsvImportModal: FC<CsvImportModalProps> = ({ isOpen, onClose }) => 
                         Company
                       </th>
                       {Object.entries(EDITABLE_FIELDS).map(([keyName, displayName]) => (
-                        <th key={keyName} className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                        <th
+                          key={keyName}
+                          className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase"
+                        >
                           {displayName}
                         </th>
                       ))}
