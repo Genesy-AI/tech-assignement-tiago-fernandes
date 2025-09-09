@@ -107,17 +107,17 @@ export const MessageTemplateModal: FC<MessageTemplateModalProps> = ({
   }, [isOpen, handleClose])
 
   // TODO fetch from backend
-  const availableFields = [
-    'firstName',
-    'lastName',
-    'email',
-    'jobTitle',
-    'companyName',
-    'countryCode',
-    'phoneNumber',
-    'yearsAtCompany',
-    'linkedinProfile',
-  ]
+  const availableFieldsWithLabels = {
+    firstName: 'First Name',
+    lastName: 'Last Name',
+    email: 'Email',
+    jobTitle: 'Job Title',
+    companyName: 'Company Name',
+    countryCode: 'Country Code',
+    phoneNumber: 'Phone Number',
+    yearsAtCompany: 'Years at Company',
+    linkedinProfile: 'Linkedin Profile',
+  }
 
   const insertField = (field: string) => {
     if (textareaRef.current) {
@@ -168,17 +168,26 @@ export const MessageTemplateModal: FC<MessageTemplateModalProps> = ({
               </label>
               <div className="space-y-3">
                 <div className="flex flex-wrap gap-2">
-                  <span className="text-sm text-gray-600">Insert field:</span>
-                  {availableFields.map((field) => (
-                    <button
-                      key={field}
-                      type="button"
-                      onClick={() => insertField(field)}
-                      className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded hover:bg-blue-200 transition-colors"
-                    >
-                      {`{${field}}`}
-                    </button>
-                  ))}
+                  {/* <span className="text-sm text-gray-600">Dynamic fields</span>   */}
+                  <select
+                    onChange={(e) => {
+                      if (e.target.value) {
+                        insertField(e.target.value)
+                        e.target.value = '' // Reset selection
+                      }
+                    }}
+                    className="ml-auto px-2 py-1 text-xs border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    defaultValue=""
+                  >
+                    <option value="" disabled>
+                      Insert field...
+                    </option>
+                    {Object.entries(availableFieldsWithLabels).map(([field, label]) => (
+                      <option key={field} value={field}>
+                        {`${label}`}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <textarea
                   ref={textareaRef}
