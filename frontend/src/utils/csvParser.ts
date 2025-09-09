@@ -50,11 +50,10 @@ export const parseCsv = (content: string): CsvLead[] => {
   const data: CsvLead[] = []
 
   parseResult.data.forEach((row, index) => {
-    if (Object.values(row).every((value) => !value)) {
-      return
-    }
+    if (Object.values(row).every((value) => !value)) return
 
     const lead: Partial<CsvLead> = { rowIndex: index + 2 }
+
     Object.entries(row).forEach(([header, value]) => {
       const normalizedHeader = header.toLowerCase().replace(/[^a-z]/g, '')
       const trimmedValue = value?.trim() || ''
