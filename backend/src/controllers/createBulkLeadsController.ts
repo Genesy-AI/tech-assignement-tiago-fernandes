@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { mapValidLeads } from '../lead'
 import { LeadModel } from '../lead/model'
-import { Lead, LeadResults, LeadError } from '../lead/types'
+import { Lead, LeadCreationResults, LeadCreationResult } from '../lead/types'
 import * as LeadRepository from '../lead/repository'
 
 /**
@@ -31,7 +31,7 @@ export const createBulkLeadsController = async (req: Request, res: Response) => 
     const newLeads: Lead[] = await findNewLeads(validLeads)
 
     // IMPROVEMENT: parallelise it make this loops async, do a promise.all to create all in parallel
-    const { importedCount, errors }: LeadResults = await LeadRepository.createLeads(newLeads)
+    const { importedCount, errors }: LeadCreationResults = await LeadRepository.createLeads(newLeads)
 
     res.json({
       success: true,

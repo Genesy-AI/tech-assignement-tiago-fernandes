@@ -1,5 +1,5 @@
 import { prisma } from '../index'
-import { Lead, LeadResults, LeadError } from './types'
+import { Lead, LeadCreationResults, LeadCreationResult } from './types'
 import { LeadModel } from './model'
 
 // IMPROVEMENT: explain this repository layer. why and what's the future for it.
@@ -11,20 +11,20 @@ import { LeadModel } from './model'
  * @param leads - array of leads
  * @returns results of the create leads operation
  */
-export const createLeads = async (leads: Lead[]): Promise<LeadResults> => {
+export const createLeads = async (leads: Lead[]): Promise<LeadCreationResults> => {
   const results = await Promise.all(leads.map(createLead))
 
-  // format the results into the LeadResults object
+  // format the results into the LeadCreationResults object
   return results.reduce(
-    ({ errors, importedCount }, [error, lead]) => {
+    ({ errors, importedCount }, { error, lead }) => {
       if (!!error) {
-        errors.push({ error: error, lead: lead })
+        errors.push({ error, lead })
       } else {
         importedCount += 1
       }
       return { errors, importedCount }
     },
-    { errors: [] as LeadError[], importedCount: 0 } as LeadResults
+    { errors: [] as LeadCreationResult[], importedCount: 0 } as LeadCreationResults
   )
 }
 
@@ -34,17 +34,17 @@ export const createLeads = async (leads: Lead[]): Promise<LeadResults> => {
  * @param lead - lead object
  * @returns results of the create lead operation
  */
-export const createLead = async (lead: Lead): Promise<[string | null, Lead]> => {
+export const createLead = async (lead: Lead): Promise<LeadCreationResult> => {
   let error: string | null = null
   try {
     await prisma.lead.create({
       data: { ...lead },
     })
-    return [null, lead]
+    return { error: null, lead }
   } catch (e: unknown) {
     console.error('Error creating lead:', { lead, error: e })
     error = e instanceof Error ? e.message : 'Unknown error'
-    return [error, lead]
+    return { error, lead }
   }
 }
 

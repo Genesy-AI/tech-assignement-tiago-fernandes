@@ -49,7 +49,7 @@ export const isValidEmail = (email: string): boolean => {
 
 /**
  * validates raw lead input to fit the Lead interface
- * 
+ *
  * @param lead
  * @returns true if valid, false otherwise
  */

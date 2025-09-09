@@ -1,16 +1,16 @@
 import { describe, it, expect } from 'vitest'
 import { generateMessageFromTemplate } from './messageGenerator'
-import { Lead } from '../lead/types'
+import { LeadModel } from '../lead/model'
 
 describe('generateMessageFromTemplate', () => {
-  const fullLead: Lead = {
+  const fullLead = {
     firstName: 'John',
     lastName: 'Doe',
     email: 'john.doe@example.com',
     jobTitle: 'Software Engineer',
     companyName: 'Tech Corp',
     countryCode: 'US',
-  }
+  } as LeadModel
   // IMPROVEMENT: based on the message in the modal for the user, "CSV must include: firstName, lastName, email (required)."
 
   const partialLead: any = {
@@ -179,7 +179,7 @@ describe('generateMessageFromTemplate', () => {
       const longLead = {
         firstName: 'A'.repeat(1000),
         companyName: 'B'.repeat(500),
-      } as Lead
+      } as LeadModel
       const template = 'Name: {firstName}, Company: {companyName}'
       const result = generateMessageFromTemplate(template, longLead)
       expect(result).toBe(`Name: ${'A'.repeat(1000)}, Company: ${'B'.repeat(500)}`)
@@ -192,7 +192,7 @@ describe('generateMessageFromTemplate', () => {
         firstName: 'José',
         companyName: 'Café & Co.',
         email: 'josé@café.com',
-      } as Lead
+      } as LeadModel
       const template = 'Hello {firstName} from {companyName}! Email: {email}'
       const result = generateMessageFromTemplate(template, specialLead)
       expect(result).toBe('Hello José from Café & Co.! Email: josé@café.com')
@@ -202,7 +202,7 @@ describe('generateMessageFromTemplate', () => {
       const emojiLead = {
         firstName: 'John 😊',
         companyName: 'TechCorp 🚀',
-      } as Lead
+      } as LeadModel
       const template = 'Hi {firstName} from {companyName}!'
       const result = generateMessageFromTemplate(template, emojiLead)
       expect(result).toBe('Hi John 😊 from TechCorp 🚀!')

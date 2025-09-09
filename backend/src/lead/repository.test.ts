@@ -15,7 +15,7 @@ vi.mock('../index', () => ({
 
 // Import the mocked prisma after mocking
 import { prisma } from '../index'
-const mockPrisma = vi.mocked(prisma)
+const mockPrisma = vi.mocked(prisma as any)
 
 describe('Lead Repository', () => {
   beforeEach(() => {
@@ -43,7 +43,7 @@ describe('Lead Repository', () => {
     it('creates a lead successfully and returns null error', async () => {
       mockPrisma.lead.create.mockResolvedValue({ id: 1, ...sampleLead })
 
-      const [error, lead] = await createLead(sampleLead)
+      const {error, lead} = await createLead(sampleLead)
 
       expect(error).toBeNull()
       expect(lead).toEqual(sampleLead)
@@ -56,7 +56,7 @@ describe('Lead Repository', () => {
       const dbError = new Error('Database connection failed')
       mockPrisma.lead.create.mockRejectedValue(dbError)
 
-      const [error, lead] = await createLead(sampleLead)
+      const {error, lead} = await createLead(sampleLead)
 
       expect(error).toBe('Database connection failed')
       expect(lead).toEqual(sampleLead)
@@ -69,7 +69,7 @@ describe('Lead Repository', () => {
     it('handles unknown error type and returns generic message', async () => {
       mockPrisma.lead.create.mockRejectedValue('Unknown error')
 
-      const [error, lead] = await createLead(sampleLead)
+      const {error, lead} = await createLead(sampleLead)
 
       expect(error).toBe('Unknown error')
       expect(lead).toEqual(sampleLead)
@@ -78,7 +78,7 @@ describe('Lead Repository', () => {
     it('handles null error and returns generic message', async () => {
       mockPrisma.lead.create.mockRejectedValue(null)
 
-      const [error, lead] = await createLead(sampleLead)
+      const {error, lead} = await createLead(sampleLead)
 
       expect(error).toBe('Unknown error')
       expect(lead).toEqual(sampleLead)

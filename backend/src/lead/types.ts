@@ -15,9 +15,8 @@ export interface Lead {
  * @param errors - array of errors
  * @param importedCount - number of imported leads
  */
-// TODO LeadCreationResults
-export type LeadResults = {
-  errors: LeadError[]
+export type LeadCreationResults = {
+  errors: LeadCreationResult[]
   importedCount: number
 }
 
@@ -26,5 +25,4 @@ export type LeadResults = {
  * @param error - error message
  * @param lead - lead object
  */
-export type LeadError = { error: string; lead: Lead }
-// TODO LeadCreationResult 
+export type LeadCreationResult = { error: string | null; lead: Lead }
