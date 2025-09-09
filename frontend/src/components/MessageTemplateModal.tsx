@@ -106,7 +106,7 @@ export const MessageTemplateModal: FC<MessageTemplateModalProps> = ({
     }
   }, [isOpen, handleClose])
 
-  // TODO fetch from backend
+  // IMPROVEMENT: fetch from backend as its duplicated from the backend and dynamic.
   const availableFieldsWithLabels = {
     firstName: 'First Name',
     lastName: 'Last Name',

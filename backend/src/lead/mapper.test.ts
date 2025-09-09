@@ -85,9 +85,9 @@ describe('Lead mapper', () => {
       })
     })
 
-    it('throws error when invalid and logs details', () => {
+    it('returns null when invalid and logs details', () => {
       const raw = { firstName: '', lastName: 'Doe', email: 'john@example.com' }
-      expect(() => mapToLead(raw as any)).toThrow('Invalid lead')
+      expect(mapToLead(raw as any)).toBeNull()
     })
   })
 

@@ -1,14 +1,33 @@
 // IMPROVEMENT: Interfaces and DTOs to a different layer
 // IMPROVEMENT: Lead as a Class with methods to validate
 import { Lead } from './types'
-// map DTO to LEadmModel
-export function mapToLead(lead: any): Lead {
-  if (!isValidLead(lead)) {
-    // TODO need to catch this error in the controller!
-    console.error('Invalid lead - ', lead)
-    throw new Error('Invalid lead')
-  }
 
+/**
+ * Validate and map raw leads to Leads,
+ * omits invalid leads.
+ *
+ * @param leads - array of leads to filter
+ * @returns array of valid leads
+ */
+export const mapValidLeads = (leads: any[]): Lead[] => {
+  const validLeads: Lead[] = leads
+    .map((lead) => {
+      return mapToLead(lead)
+    })
+    .filter((lead) => !!lead)
+
+  return validLeads
+}
+
+/**
+ * validates and maps raw lead input to Lead
+ * @param lead
+ * @returns Lead or null if not valid
+ */
+export function mapToLead(lead: any): Lead | null {
+  if (!isValidLead(lead)) {
+    return null
+  }
   return {
     firstName: lead.firstName.trim(),
     lastName: lead.lastName.trim(),
@@ -46,7 +65,9 @@ export function isValidLead(lead: any): boolean {
   if (!hasStringFirstName || !hasStringLastName || !hasStringEmail) {
     return false
   }
-  // Ensure booleans returned, and validate types of optional fields first
+  // optional fields
+  // IMPROVEMENT: make this more DRY
+  // if the optional fields are present, they should be strings and not null or undefined
   if (!!lead.companyName && typeof lead.companyName !== 'string') {
     return false
   }
@@ -62,39 +83,10 @@ export function isValidLead(lead: any): boolean {
   if (!!lead.linkedinProfile && typeof lead.linkedinProfile !== 'string') {
     return false
   }
-
   // the most expensive calculation goes last
   if (!isValidEmail(lead.email.trim())) {
     return false
   }
 
   return true
-}
-// TODO
-const existsAndIsString = (value: any): boolean => {
-  return value !== null && value !== undefined && typeof value === 'string'
-}
-/**
- * Validate and map raw leads to Leads,
- * omits invalid leads.
- *
- * @param leads - array of leads to filter
- * @returns array of valid leads
- */
-export const mapValidLeads = (leads: any[]): Lead[] => {
-  const validLeads: Lead[] = leads
-    .map((lead) => {
-      try {
-        return mapToLead(lead)
-      } catch (error) {
-        // TODO remove these logs
-        // how should we log the invalid leads?
-        console.log('lead', lead)
-        console.error('Error mapping lead:', error)
-        return null
-      }
-    })
-    .filter((lead) => !!lead)
-
-  return validLeads
 }

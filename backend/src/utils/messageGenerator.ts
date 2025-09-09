@@ -1,6 +1,6 @@
-import { Lead } from '../lead/types'
-// TODO double check where Lead comes from? should it be LeadModel?
-export function generateMessageFromTemplate(template: string, lead: Lead): string {
+import { LeadModel } from '../lead/model'
+
+export function generateMessageFromTemplate(template: string, lead: LeadModel): string {
   let message = template
 
   // key fields that can be replaced in the template for a value.
@@ -16,14 +16,10 @@ export function generateMessageFromTemplate(template: string, lead: Lead): strin
     linkedinProfile: lead.linkedinProfile,
   }
 
-  console.log('availableFields', replaceableKeyFields)
-  console.log('lead keys', Object.keys(lead))
-
   // IMPROVEMENT: this regex will match anything that the USER provides,
   // vs the fields that are available from our business logic.
   // Should we invert the logic e.g. find for {validField} instead of {userMadeUpField}?
   const templateVariables = template.match(/\{(\w+)\}/g) || []
-  console.log('templateVariables', templateVariables)
   for (const variable of templateVariables) {
     const fieldName = variable.slice(1, -1)
 

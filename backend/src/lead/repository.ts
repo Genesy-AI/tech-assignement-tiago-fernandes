@@ -2,7 +2,7 @@ import { prisma } from '../index'
 import { Lead, LeadResults, LeadError } from './types'
 import { LeadModel } from './model'
 
-// TODO explain this repository layer. why and what's the future for it.
+// IMPROVEMENT: explain this repository layer. why and what's the future for it.
 
 /**
  * Create leads in the database
@@ -30,11 +30,11 @@ export const createLeads = async (leads: Lead[]): Promise<LeadResults> => {
 
 /**
  * Create a lead in the database
+ * if operation fails, returns the error and the lead
  * @param lead - lead object
  * @returns results of the create lead operation
  */
 export const createLead = async (lead: Lead): Promise<[string | null, Lead]> => {
-  // TODO will this API signature fit for Repository?
   let error: string | null = null
   try {
     await prisma.lead.create({
@@ -42,6 +42,7 @@ export const createLead = async (lead: Lead): Promise<[string | null, Lead]> => 
     })
     return [null, lead]
   } catch (e: unknown) {
+    console.error('Error creating lead:', { lead, error: e })
     error = e instanceof Error ? e.message : 'Unknown error'
     return [error, lead]
   }

@@ -93,7 +93,7 @@ describe('createBulkLeadsController', () => {
     const validLeads = [{ firstName: 'Jane', lastName: 'Roe', email: 'jane@example.com' }]
     ;(mapValidLeads as any).mockReturnValue(validLeads)
     ;(LeadRepository.findExistingLeads as any).mockResolvedValue([])
-    ;(LeadRepository.createLeads as any).mockRejectedValue(new Error('db down'))
+    ;(LeadRepository.createLeads as any).mockRejectedValue(new Error('fake db down'))
 
     const req: any = { body: { leads: validLeads } }
     const res = buildRes()
@@ -101,6 +101,6 @@ describe('createBulkLeadsController', () => {
     await createBulkLeadsController(req, res)
 
     expect(res.status).toHaveBeenCalledWith(500)
-    expect(res.json).toHaveBeenCalledWith({ error: 'Failed to import leads' })
+    expect(res.json).toHaveBeenCalledWith({ error: 'Failed to import leads: fake db down' })
   })
 })

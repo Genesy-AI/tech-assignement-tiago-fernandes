@@ -1,9 +1,11 @@
 import { PrismaClient } from '@prisma/client'
-import express, { NextFunction, Request, Response } from 'express'
+import express, { Request, Response } from 'express'
 import { generateMessageFromTemplate } from './utils/messageGenerator'
 import { createBulkLeadsController } from './controllers/createBulkLeadsController'
 import { jsonValidatorMiddleware } from './middlewares/jsonValidatorMiddleware'
-// TODO prisma / and Repository abstraction to a different layer
+import { LeadModel } from './lead/model'
+
+// IMPROVEMENT: prisma / and Repository abstraction to a different layer
 export const prisma = new PrismaClient()
 const app = express()
 app.use(express.json())
@@ -116,8 +118,7 @@ app.post('/leads/generate-messages', jsonValidatorMiddleware, async (req: Reques
   }
 
   try {
-    // TODO type the DB model
-    const leads = await prisma.lead.findMany({
+    const leads: LeadModel[] = await prisma.lead.findMany({
       where: {
         id: {
           in: leadIds.map((id) => Number(id)),

@@ -17,7 +17,6 @@ export const EditableCell = ({
       <EditableField
         value={value}
         onSave={(newValue) => {
-          console.log('onSave', newValue)
           updateValue(newValue)
         }}
       />
@@ -51,7 +50,6 @@ export const EditableField = ({
 
   const commit = useCallback(() => {
     const next = draft.trim()
-    console.log('commit', next)
 
     if (onSave) onSave(next)
     setIsEditing(false)
@@ -74,7 +72,6 @@ export const EditableField = ({
       type="text"
       value={draft}
       onChange={(e) => {
-        console.log('onchange', e.target.value)
         setDraft(e.target.value)
       }}
       onBlur={commit}

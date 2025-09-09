@@ -50,19 +50,12 @@ export const parseCsv = (content: string): CsvLead[] => {
   const data: CsvLead[] = []
 
   parseResult.data.forEach((row, index) => {
-    console.log('row', row)
     if (Object.values(row).every((value) => !value)) {
-      console.log('row is empty')
       return
-    } else {
-      console.log('row is not empty')
     }
 
     const lead: Partial<CsvLead> = { rowIndex: index + 2 }
-    console.log('lead', lead)
     Object.entries(row).forEach(([header, value]) => {
-      console.log('header', header)
-      console.log('value', value)
       const normalizedHeader = header.toLowerCase().replace(/[^a-z]/g, '')
       const trimmedValue = value?.trim() || ''
 
@@ -113,7 +106,7 @@ export const parseCsv = (content: string): CsvLead[] => {
     if (lead.countryCode?.trim() && !isValidCountryCode(lead.countryCode?.trim())) {
       errors.push('Country code is not valid')
     }
-    console.log('lead', lead)
+
     data.push({
       ...lead,
       firstName: lead.firstName || '',

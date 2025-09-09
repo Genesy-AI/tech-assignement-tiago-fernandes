@@ -43,7 +43,9 @@ export const createBulkLeadsController = async (req: Request, res: Response) => 
   } catch (error) {
     // IMPROVEMENT: Error Handling middleware, throw error(message)
     console.error('Error importing leads:', error)
-    res.status(500).json({ error: 'Failed to import leads' })
+    res
+      .status(500)
+      .json({ error: `Failed to import leads: ${error instanceof Error ? error.message : 'Unknown error'}` })
   }
 }
 
