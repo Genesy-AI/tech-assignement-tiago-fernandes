@@ -138,7 +138,7 @@ app.post('/leads/generate-messages', jsonValidatorMiddleware, async (req: Reques
         const message = generateMessageFromTemplate(template, lead)
         // IMPROVEMENT:parallelise it make this loops async, do a promise.all to update all in parallel
         await prisma.lead.update({
-          where: { id: lead.id }, // id is part of the leadDBmodel
+          where: { id: lead.id },
           data: { message },
         })
 
