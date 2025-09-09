@@ -47,6 +47,12 @@ export const isValidEmail = (email: string): boolean => {
   return emailRegex.test(email)
 }
 
+/**
+ * validates raw lead input to fit the Lead interface
+ * 
+ * @param lead
+ * @returns true if valid, false otherwise
+ */
 export function isValidLead(lead: any): boolean {
   const firstName = lead.firstName
   const lastName = lead.lastName

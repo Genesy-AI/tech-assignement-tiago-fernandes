@@ -24,7 +24,7 @@ export const createLeads = async (leads: Lead[]): Promise<LeadResults> => {
       }
       return { errors, importedCount }
     },
-    { errors: [] as LeadError[], importedCount: 0 }
+    { errors: [] as LeadError[], importedCount: 0 } as LeadResults
   )
 }
 
