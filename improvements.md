@@ -2,7 +2,7 @@
 
 | # | top priorities | impact | effort assessment |
 |---|----------------|--------|-------------------|
-|1 | project structure | high | In order to progress with the project we must follow a structure to organise the building blocks that form frontend and backend|
+|1 | project structure | high | In order to progress with the project we must follow a structure to organise the building blocks that form frontend and backend. A simple separation of concerns e.g. functional pieces (controllers, middlewares, etc) and/or Domain notions (Leads) would help the overall readability and comprehension of the overall project. |
 | 2 | DDD principles | high | To summarise this long topic, we could apply DDD principles segregating the infrastructure part from the Business Logic and Domain notions. Alongise the SOLID principles such as IoC we could create simpler, portable code, easy to test, understand and extend. | Very High |
 
 ## Potential bug 
