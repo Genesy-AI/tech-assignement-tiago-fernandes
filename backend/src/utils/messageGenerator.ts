@@ -16,7 +16,7 @@ export function generateMessageFromTemplate(template: string, lead: LeadModel): 
     linkedinProfile: lead.linkedinProfile,
   }
 
-  // IMPROVEMENT: this regex will match anything that the USER provides,
+  // This regex will match anything that the USER provides,
   // vs the fields that are available from our business logic.
   // Should we invert the logic e.g. find for {validField} instead of {userMadeUpField}?
   const templateVariables = template.match(/\{(\w+)\}/g) || []

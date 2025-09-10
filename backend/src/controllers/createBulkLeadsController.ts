@@ -18,7 +18,6 @@ export const createBulkLeadsController = async (req: Request, res: Response) => 
       return res.status(400).json({ error: 'leads must be a non-empty array' })
     }
 
-    // IMPROVEMENT: input validation extra step regardless of the frontend validation?
     const validLeads: Lead[] = mapValidLeads(leads)
 
     if (validLeads.length === 0) {
