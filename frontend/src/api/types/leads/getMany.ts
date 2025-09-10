@@ -11,4 +11,7 @@ export type LeadsGetManyOutput = {
   countryCode: string | null
   companyName: string | null
   message: string | null
+  yearsAtCompany: string | null
+  linkedinProfile: string | null
+  phoneNumber: string | null
 }[]

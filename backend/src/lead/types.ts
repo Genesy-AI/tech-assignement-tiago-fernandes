@@ -1,0 +1,30 @@
+/**
+ * Lead is the type that represents a lead in the application
+ */
+export interface Lead {
+  firstName: string
+  lastName: string
+  email: string
+  jobTitle?: string | null
+  companyName?: string | null
+  countryCode?: string | null
+  phoneNumber?: string | null
+  yearsAtCompany?: string | null
+  linkedinProfile?: string | null
+}
+/**
+ * Results of the create leads operation
+ * @param errors - array of errors
+ * @param importedCount - number of imported leads
+ */
+export type LeadCreationResults = {
+  errors: LeadCreationResult[]
+  importedCount: number
+}
+
+/**
+ * Result of the create lead operation
+ * @param error - error message
+ * @param lead - lead object
+ */
+export type LeadCreationResult = { error: string | null; lead: Lead }

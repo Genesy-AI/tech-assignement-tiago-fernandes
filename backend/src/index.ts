@@ -1,7 +1,11 @@
 import { PrismaClient } from '@prisma/client'
 import express, { Request, Response } from 'express'
 import { generateMessageFromTemplate } from './utils/messageGenerator'
-const prisma = new PrismaClient()
+import { createBulkLeadsController } from './controllers/createBulkLeadsController'
+import { jsonValidatorMiddleware } from './middlewares/jsonValidatorMiddleware'
+import { LeadModel } from './lead/model'
+
+export const prisma = new PrismaClient()
 const app = express()
 app.use(express.json())
 
@@ -76,11 +80,7 @@ app.delete('/leads/:id', async (req: Request, res: Response) => {
   res.json()
 })
 
-app.delete('/leads', async (req: Request, res: Response) => {
-  if (!req.body || typeof req.body !== 'object') {
-    return res.status(400).json({ error: 'Request body is required and must be valid JSON' })
-  }
-
+app.delete('/leads', jsonValidatorMiddleware, async (req: Request, res: Response) => {
   const { ids } = req.body
 
   if (!Array.isArray(ids) || ids.length === 0) {
@@ -103,14 +103,9 @@ app.delete('/leads', async (req: Request, res: Response) => {
   }
 })
 
-app.post('/leads/generate-messages', async (req: Request, res: Response) => {
-  if (!req.body || typeof req.body !== 'object') {
-    return res.status(400).json({ error: 'Request body is required and must be valid JSON' })
-  }
-
+app.post('/leads/generate-messages', jsonValidatorMiddleware, async (req: Request, res: Response) => {
   const { leadIds, template } = req.body
 
-  // IMPROVEMENT: validation + throw custom error class. (validation middleware? not sure as it might be business logic)
   if (!Array.isArray(leadIds) || leadIds.length === 0) {
     return res.status(400).json({ error: 'leadIds must be a non-empty array' })
   }
@@ -120,7 +115,7 @@ app.post('/leads/generate-messages', async (req: Request, res: Response) => {
   }
 
   try {
-    const leads = await prisma.lead.findMany({
+    const leads: LeadModel[] = await prisma.lead.findMany({
       where: {
         id: {
           in: leadIds.map((id) => Number(id)),
@@ -138,7 +133,6 @@ app.post('/leads/generate-messages', async (req: Request, res: Response) => {
     for (const lead of leads) {
       try {
         const message = generateMessageFromTemplate(template, lead)
-
         await prisma.lead.update({
           where: { id: lead.id },
           data: { message },
@@ -165,93 +159,7 @@ app.post('/leads/generate-messages', async (req: Request, res: Response) => {
   }
 })
 
-app.post('/leads/bulk', async (req: Request, res: Response) => {
-  if (!req.body || typeof req.body !== 'object') {
-    return res.status(400).json({ error: 'Request body is required and must be valid JSON' })
-  }
-
-  const { leads } = req.body
-
-  if (!Array.isArray(leads) || leads.length === 0) {
-    return res.status(400).json({ error: 'leads must be a non-empty array' })
-  }
-
-  try {
-
-    // IMPROVEMENT: input validation extra step regardless of the frontend validation?
-    const validLeads = leads.filter((lead) => {
-      return (
-        lead.firstName &&
-        lead.lastName &&
-        lead.email &&
-        typeof lead.firstName === 'string' &&
-        lead.firstName.trim() &&
-        typeof lead.lastName === 'string' &&
-        lead.lastName.trim() &&
-        typeof lead.email === 'string' &&
-        lead.email.trim()
-      )
-    })
-
-    if (validLeads.length === 0) {
-      return res
-        .status(400)
-        .json({ error: 'No valid leads found. firstName, lastName, and email are required.' })
-    }
-
-    const existingLeads = await prisma.lead.findMany({
-      where: {
-        OR: validLeads.map((lead) => ({
-          AND: [{ firstName: lead.firstName.trim() }, { lastName: lead.lastName.trim() }],
-        })),
-      },
-    })
-
-    const leadKeys = new Set(
-      existingLeads.map((lead) => `${lead.firstName.toLowerCase()}_${(lead.lastName || '').toLowerCase()}`)
-    )
-
-    const uniqueLeads = validLeads.filter((lead) => {
-      const key = `${lead.firstName.toLowerCase()}_${lead.lastName.toLowerCase()}`
-      return !leadKeys.has(key)
-    })
-
-    let importedCount = 0
-    const errors: Array<{ lead: any; error: string }> = []
-
-    for (const lead of uniqueLeads) {
-      try {
-        await prisma.lead.create({
-          data: {
-            firstName: lead.firstName.trim(),
-            lastName: lead.lastName.trim(),
-            email: lead.email.trim(),
-            jobTitle: lead.jobTitle ? lead.jobTitle.trim() : null,
-            countryCode: lead.countryCode ? lead.countryCode.trim() : null,
-            companyName: lead.companyName ? lead.companyName.trim() : null,
-          },
-        })
-        importedCount++
-      } catch (error) {
-        errors.push({
-          lead: lead,
-          error: error instanceof Error ? error.message : 'Unknown error',
-        })
-      }
-    }
-
-    res.json({
-      success: true,
-      importedCount,
-      duplicatesSkipped: validLeads.length - uniqueLeads.length,
-      invalidLeads: leads.length - validLeads.length,
-      errors,
-    })
-  } catch (error) {
-    console.error('Error importing leads:', error)
-    res.status(500).json({ error: 'Failed to import leads' })
-  }
-})
+app.post('/leads/bulk', jsonValidatorMiddleware, createBulkLeadsController)
 
 app.listen(4000, () => {
   console.log('Express server is running on port 4000')

@@ -6,6 +6,7 @@ import { MessageTemplateModal } from './MessageTemplateModal'
 import { CsvImportModal } from './CsvImportModal'
 
 import { countryCodesFlags } from '../utils/countryCode'
+import { IconBrandLinkedinFilled } from '@tabler/icons-react'
 
 export const LeadsList: FC = () => {
   const [selectedLeads, setSelectedLeads] = useState<number[]>([])
@@ -292,13 +293,31 @@ export const LeadsList: FC = () => {
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50"
                 >
+                  Country
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50"
+                >
+                  Phone Number
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50"
+                >
                   Company
                 </th>
                 <th
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50"
                 >
-                  Country
+                  Years at Company
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50"
+                >
+                  Linkedin
                 </th>
                 <th
                   scope="col"
@@ -343,13 +362,34 @@ export const LeadsList: FC = () => {
                       <div className="text-sm text-gray-900">{lead.jobTitle || '-'}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">{lead.companyName || '-'}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {/* <div className="text-sm text-gray-900">{lead.countryCode || '-'}</div> */}
                       <div className="text-sm text-gray-900">
                         {lead.countryCode ? countryCodesFlags[lead.countryCode] : '-'}
                       </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-900">{lead.phoneNumber || '-'}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-900">{lead.companyName || '-'}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-900">{lead.yearsAtCompany || '-'}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {lead.linkedinProfile && (
+                        <>
+                          <a
+                            href={lead.linkedinProfile}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 hover:text-blue-600 transition-colors"
+                          >
+                            <IconBrandLinkedinFilled size={20} />
+                            &nbsp;LinkedIn
+                          </a>
+                        </>
+                      )}
+                      {!lead.linkedinProfile && <div className="text-sm text-gray-900">-</div>}
                     </td>
                     <td className="px-6 py-4">
                       <div className="text-sm text-gray-900 max-w-xs truncate" title={lead.message || ''}>

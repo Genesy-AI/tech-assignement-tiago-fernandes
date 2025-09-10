@@ -8,6 +8,9 @@ export interface CsvLead {
   jobTitle?: string
   countryCode?: string
   companyName?: string
+  phoneNumber?: string
+  yearsAtCompany?: string
+  linkedinProfile?: string
   isValid: boolean
   errors: string[]
   rowIndex: number
@@ -74,6 +77,15 @@ export const parseCsv = (content: string): CsvLead[] => {
         case 'companyname':
           lead.companyName = trimmedValue || undefined
           break
+        case 'phonenumber':
+          lead.phoneNumber = trimmedValue || undefined
+          break
+        case 'yearsatcompany':
+          lead.yearsAtCompany = trimmedValue || undefined
+          break
+        case 'linkedinprofile':
+          lead.linkedinProfile = trimmedValue || undefined
+          break
       }
     })
 
@@ -100,6 +112,7 @@ export const parseCsv = (content: string): CsvLead[] => {
       lastName: lead.lastName || '',
       email: lead.email || '',
       countryCode: lead.countryCode?.toUpperCase() || undefined,
+      phoneNumber: lead.phoneNumber || undefined,
       isValid: errors.length === 0,
       errors,
     } as CsvLead)
