@@ -1,3 +1,6 @@
+/**
+ * LeadModel is the type that represents a lead in the database
+ */
 export type LeadModel = {
   id: number
   createdAt: Date

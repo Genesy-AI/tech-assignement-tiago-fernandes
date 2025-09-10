@@ -11,7 +11,6 @@ describe('generateMessageFromTemplate', () => {
     companyName: 'Tech Corp',
     countryCode: 'US',
   } as LeadModel
-  // IMPROVEMENT: based on the message in the modal for the user, "CSV must include: firstName, lastName, email (required)."
 
   const partialLead: any = {
     firstName: 'Jane',

@@ -1,4 +1,6 @@
-// DTO
+/**
+ * Lead is the type that represents a lead in the application
+ */
 export interface Lead {
   firstName: string
   lastName: string
@@ -21,7 +23,7 @@ export type LeadCreationResults = {
 }
 
 /**
- * Error object for a lead
+ * Result of the create lead operation
  * @param error - error message
  * @param lead - lead object
  */
